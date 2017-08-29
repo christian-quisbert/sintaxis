@@ -21,3 +21,4 @@ typedef enum{
 
 int columna(char);
 TOKEN Scanner(char*);
+int tablaSimbolos(char*);

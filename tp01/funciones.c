@@ -6,6 +6,7 @@
 		\version Versión 1.0.0
 */
 #include <stdio.h>
+#include <string.h>
 #include <ctype.h>
 #include "funciones.h"
 
@@ -42,9 +43,8 @@ int columna(char c){
 		\return TOKEN
 */
 TOKEN Scanner(char * lexema){
-
 	/*Tabla de transición de lenguaje MICRO*/
-    int TT[ESTADOS][COLUMNAS] = {
+    static int TT[ESTADOS][COLUMNAS] = {
 		{1	,3	,5	,6	,7	,8	,9	,10	,11	,14	,13	,0	,14	},
 		{1	,1	,2	,2	,2	,2	,2	,2	,2	,2	,2	,2	,2	},
 		{14	,14	,14	,14	,14	,14	,14	,14	,14	,14	,14	,14	,14	},
@@ -77,6 +77,21 @@ TOKEN Scanner(char * lexema){
 	/*Retorno el token que corresponda al último estado*/
 	switch(estado){
 		case 1:
+			/* Me fijo el tipo de ID */
+			switch(tablaSimbolos(lexema)){
+			case 1:
+				printf("Palabra reservada: INICIO\n");
+				return INICIO;
+			case 2:
+				printf("Palabra reservada: FIN\n");
+				return FIN;
+			case 3:
+				printf("Palabra reservada: LEER\n");
+				return LEER;
+			case 4:
+				printf("Palabra reservada: ESCRIBIR\n");
+				return ESCRIBIR;
+			}
 			printf("ID\n");
 			return ID;
 		case 2:
@@ -122,4 +137,19 @@ TOKEN Scanner(char * lexema){
 			break;
 	}
     return  0;
+}
+/**
+		\fn     tablaSimbolos
+		\brief  Indica si un lexema ingresado es palabra reservada.
+		\author Chistian Leonel Quisbert (christianquisbert@gmail.com)
+		\date   2017.08.29
+		\param  char * lexema
+		\return int 
+*/
+int tablaSimbolos(char* lexema){
+	static char* simbolos[4]={"INICIO","FIN","LEER","ESCRIBIR"};
+	int i;
+	for(i=0;i<4;i++)
+		if(!strcmp(lexema,simbolos[i])) break;
+	return i+1;//le sumo 1 para que quede igual que el enum
 }
