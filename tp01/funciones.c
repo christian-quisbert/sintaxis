@@ -42,7 +42,7 @@ int columna(char c){
 		\param  char * lexema
 		\return TOKEN
 */
-TOKEN Scanner(char * lexema){
+TOKEN scanner(char * lexema){
 	/*Tabla de transición de lenguaje MICRO*/
     static int TT[ESTADOS][COLUMNAS] = {
 		{1	,3	,5	,6	,7	,8	,9	,10	,11	,14	,13	,0	,14	},
@@ -77,66 +77,42 @@ TOKEN Scanner(char * lexema){
 	/*Retorno el token que corresponda al último estado*/
 	switch(estado){
 		case 1:
-			/* Me fijo el tipo de ID */
 			switch(tablaSimbolos(lexema)){
 			case 1:
-				printf("Palabra reservada: INICIO\n");
 				return INICIO;
 			case 2:
-				printf("Palabra reservada: FIN\n");
 				return FIN;
 			case 3:
-				printf("Palabra reservada: LEER\n");
 				return LEER;
 			case 4:
-				printf("Palabra reservada: ESCRIBIR\n");
 				return ESCRIBIR;
 			}
-			printf("ID\n");
 			return ID;
-		case 2:
-			printf("ERROR LEXICO\n");
-			return ERRORLEXICO;
 		case 3:
-			printf("CONSTANTE\n");
 			return CONSTANTE;
-		case 4:
-			printf("ERROR LEXICO\n");
-			return ERRORLEXICO;
 		case 5:
-			printf("SUMA\n");
 			return SUMA;
 		case 6:
-			printf("RESTA\n");
 			return RESTA;
 		case 7:
-			printf("PARENIZQUIERDO\n");
 			return PARENIZQUIERDO;
 		case 8:
-			printf("PARENDERECHO\n");
 			return PARENDERECHO;
 		case 9:
-			printf("COMA\n");
 			return COMA;
 		case 10:
-			printf("PUNTOYCOMA\n");
 			return PUNTOYCOMA;
-		case 11:
-			printf("ERROR LEXICO\n");
-			return ERRORLEXICO;
 		case 12:
-			printf("ASIGNACION\n");
 			return ASIGNACION;
 		case 13:
-			printf("FDT");
 			return FDT;
+		case 2:
+		case 4:
+		case 11:
 		case 14:
-			printf("ERROR LEXICO\n");
 			return ERRORLEXICO;
-		default:
-			break;
 	}
-    return  0;
+    return -1; //nunca se va a leer esto
 }
 /**
 		\fn     tablaSimbolos
