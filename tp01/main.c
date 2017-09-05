@@ -10,7 +10,8 @@
 
 int main (int argc, char ** argv){
 	if (argc != 2){
-		printf("uso: scanner lexema");
+		printf("Cantidad incorrecta de argumentos!\n");
+		printf("Debe ingresar 1 lexema.\n");
 		return -1;
 	}
 	
