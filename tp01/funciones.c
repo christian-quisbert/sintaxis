@@ -129,3 +129,47 @@ int tablaSimbolos(char* lexema){
 		if(!strcmp(lexema,simbolos[i])) break;
 	return i+1;//le sumo 1 para que quede igual que el enum
 }
+
+
+
+void Primaria(REG_EXPRESION * presul)
+{
+	TOKEN tok = ProximoToken();
+
+	switch(tok)
+	{
+		case ID : Identificador(presul);
+			break;
+
+		case CONSTANTE : match(CONSTANTE);
+			*presul = ProcesarCte();
+			break;
+
+		case PARENIZQUIERDO : Match(PARENIZQUIERDO);
+			Expresion(presul);
+			Match(PARENDERECHO);
+			break;
+	default : return;
+	}
+}
+
+
+void Expresion (void){
+	TOKEN t;
+	Primaria();
+	for (t = ProximoToken(); t == SUMA || t == RESTA ; t = ProximoToken())
+	{
+		OperadorAditivo(); Primaria();
+	}
+}
+
+void OperadorAditivo (void){
+	TOKEN t = ProximoToken();
+	if(t==SUMA || t == RESTA)
+		Match(t);
+	else
+		ErrorSintactico(t);
+
+}
+
+
