@@ -13,7 +13,6 @@
 /**
 		\fn     columna
 		\brief  Devuelve la COLUMNA correspondiente al caracter ingresado.
-		\author Chistian Leonel Quisbert (christianquisbert@gmail.com)
 		\date   2017.08.21
 		\param  char c
 		\return int col
@@ -36,13 +35,11 @@ int columna(char c){
 
 /**
 		\fn     Scanner
-		\brief  Indica el token de un lexema ingresado por parámetro.
-		\author Chistian Leonel Quisbert (christianquisbert@gmail.com)
+		\brief  
 		\date   2017.08.23
-		\param  char * lexema
 		\return TOKEN
 */
-TOKEN scanner(char * lexema){
+TOKEN scanner(){
 	/*Tabla de transición de lenguaje MICRO*/
     static int TT[ESTADOS][COLUMNAS] = {
 		{1	,3	,5	,6	,7	,8	,9	,10	,11	,14	,13	,0	,14	},
@@ -117,7 +114,6 @@ TOKEN scanner(char * lexema){
 /**
 		\fn     tablaSimbolos
 		\brief  Indica si un lexema ingresado es palabra reservada.
-		\author Chistian Leonel Quisbert (christianquisbert@gmail.com)
 		\date   2017.08.29
 		\param  char * lexema
 		\return int 
@@ -129,47 +125,3 @@ int tablaSimbolos(char* lexema){
 		if(!strcmp(lexema,simbolos[i])) break;
 	return i+1;//le sumo 1 para que quede igual que el enum
 }
-
-
-
-void Primaria(REG_EXPRESION * presul)
-{
-	TOKEN tok = ProximoToken();
-
-	switch(tok)
-	{
-		case ID : Identificador(presul);
-			break;
-
-		case CONSTANTE : match(CONSTANTE);
-			*presul = ProcesarCte();
-			break;
-
-		case PARENIZQUIERDO : Match(PARENIZQUIERDO);
-			Expresion(presul);
-			Match(PARENDERECHO);
-			break;
-	default : return;
-	}
-}
-
-
-void Expresion (void){
-	TOKEN t;
-	Primaria();
-	for (t = ProximoToken(); t == SUMA || t == RESTA ; t = ProximoToken())
-	{
-		OperadorAditivo(); Primaria();
-	}
-}
-
-void OperadorAditivo (void){
-	TOKEN t = ProximoToken();
-	if(t==SUMA || t == RESTA)
-		Match(t);
-	else
-		ErrorSintactico(t);
-
-}
-
-
