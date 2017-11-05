@@ -35,10 +35,6 @@ int main (int argc, char ** argv){
 
 	Objetivo();
 
-	/*while(fgets(linea, TAMLIN+1, in) == NULL){
-
-	}*/
-
 	fclose(in);
 	fclose(out);
 	return 0;

@@ -6,6 +6,7 @@
 		\version Versión 1.0.0
 */
 #include <stdio.h>
+#include <string.h>
 #include "funciones.h"
 
 /**
@@ -43,7 +44,8 @@ TOKEN ProximoToken(void){
 */
 void Objetivo (void){
 	Programa();
-	Match(FDT);
+    Match(FDT);
+    Terminar();
 }
 /**
 		\fn     Programa
@@ -51,6 +53,7 @@ void Objetivo (void){
 		\date   2017.11.04
 */
 void Programa (void){
+    Comenzar();
     Match(INICIO);
     ListaSentencias();
     Match(FIN);
@@ -81,11 +84,15 @@ void ListaSentencias(void){
 */
 void Sentencia(void){
     TOKEN token = ProximoToken();
+    REG_EXPRESION izquierda;
+    REG_EXPRESION derecha;
+
     switch(token){
         case ID:
-            Match(ID);
+            Identificador(&izquierda);
             Match(ASIGNACION);
-            Expresion();
+            Expresion(&derecha);
+            Asignar(izquierda, derecha);
             Match(PUNTOYCOMA);
             break;
         case LEER:
@@ -120,7 +127,8 @@ void Expresion(REG_EXPRESION * resultado){
 	{
         OperadorAditivo(&op);
         Primaria(&operandoDer);
-        operandoIzq = GenInfijo(operandoIzq, op, operandoDer);
+        memcpy(&operandoIzq, GenInfijo(operandoIzq, op, operandoDer),sizeof(REG_EXPRESION)); 
+        /* operandoIzq = GenInfijo(operandoIzq, op, operandoDer);*/
     }
     *resultado = operandoIzq;
 }
@@ -129,12 +137,20 @@ void Expresion(REG_EXPRESION * resultado){
 		\brief  Analiza que el ProximoToken sea un operador.
 		\date   2017.11.04
 */
-void OperadorAditivo (void){
-	TOKEN token = ProximoToken();
-	if(token == SUMA || token == RESTA)
-		Match(token);
-	else
-		ErrorSintactico(token);
+void OperadorAditivo(REG_OPERACION * op){
+    TOKEN token = ProximoToken();
+    switch(token){
+        case SUMA:
+            Match(token);
+            op = ProcesarOp();
+            break;
+        case RESTA:
+            Match(token);
+            op = ProcesarOp();
+            break;
+        default:
+            ErrorSintactico(token);
+    }
 }
 /*
 		\fn     Primaria
@@ -146,11 +162,11 @@ void Primaria(REG_EXPRESION * presul){
 
     switch(token){
         case ID:
-            Identificador(ID);
+            Identificador(presul);
             break;
         case CONSTANTE:
             Match(CONSTANTE);
-            *presul = ProcesarCte();
+            presul = ProcesarCte();
             break;
         case PARENIZQUIERDO:
             Match(PARENIZQUIERDO);
@@ -192,13 +208,10 @@ void ListaExpresiones(void){
     for(t = ProximoToken(); t == COMA; t = ProximoToken()){
         Match(COMA);
         Expresion(&reg);
-        Match(COMA);
+        Escribir(reg);
     }
 
 }
-
-/*---------------------------------------------------------*/
-
 /*
 		\fn     Primaria
 		\brief  Procesa un ID, genera el REG semantico apropiado.
@@ -209,48 +222,19 @@ void Identificador(REG_EXPRESION * presul){
     Match(ID);
     *presul = ProcesarId();
 }
-/*
-		\fn     ProcesarId
-		\brief  Declara ID y construye el correspondiente registro semántico (struct).
-        \date   2017.11.04
-        \return REG_EXPRESION        
-*/
-REG_EXPRESION ProcesarId(void){
-    REG_EXPRESION t;
-    Chequear(buffer);
-    t.clase = ID;
-    strcpy(t.nombre, buffer);
-    return t;
-}
-/*
-		\fn     Chequear
-		\brief  Verifica que la cadena esté en la tabla de símbolos.
-        \date   2017.11.04
-        \param  char * s
-*/
-void Chequear(char * s){
-    if(!Buscar(s)){
-        Colocar(s);
-        Generar("Declara", s, "Entera", "");
-    }
-}
-/*
-		\fn     Colocar
-        \brief  Inserta un ID en la tabla de símbolos.
-        \date   2017.11.04
-        \param  char * s
-*/
-void Colocar(char * s){
 
-}
+/****************************************
+********** FUNCIONES AUXILIARES *********
+*****************************************/
+
 /*
 		\fn     Generar
 		\brief  Genero la instrucción que va en la MV.
         \date   2017.11.04
         \param  char * a,b,c,d
 */
-void Generar(char * accion, char * id, char * tipo, char * d){
-    fprintf(out,"\nInstrucción: %s %s, %s %s\n", accion, id, tipo, d);
+void Generar(char * accion, char * v1, char * v2, char * d){
+    fprintf(out,"\nInstrucción: %s %s, %s %s\n", accion, v1, v2, d);
 }
 /*
 		\fn     Extraer
@@ -261,4 +245,33 @@ void Generar(char * accion, char * id, char * tipo, char * d){
 char * Extraer(REG_EXPRESION reg){
     return reg.nombre;
 }
+/*
+		\fn     Buscar
+        \brief  Bsuca un ID en la tabla de símbolos, y determina si se encuentra o nó.
+        \date   2017.11.05
+        \param  char * s
+*/
+void Buscar(char * s){
+    
+}
+/*
+		\fn     Colocar
+        \brief  Inserta un ID en la tabla de símbolos.
+        \date   2017.11.05
+        \param  char * s
+*/
+void Colocar(char * s){
 
+}
+/*
+		\fn     Chequear
+		\brief  Verifica que la cadena esté en la tabla de símbolos.
+        \date   2017.11.05
+        \param  char * s
+*/
+void Chequear(char * s){
+    if(!Buscar(s)){
+        Colocar(s);
+        Generar("Declara", s, "Entera", "");
+    }
+}
