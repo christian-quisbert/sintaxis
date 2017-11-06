@@ -20,13 +20,14 @@
 */
 void Comenzar(void){
     flagToken = 0;
+    initTS();
 }
 /**
 		\fn     Terminar
 		\brief  Genera la instrucción para terminar la ejecución del programa.
         \date   2017.11.05
 */
-void terminar(void){
+void Terminar(void){
     Generar("Detiene", "", "", "");
 }
 /**

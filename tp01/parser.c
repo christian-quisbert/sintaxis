@@ -32,7 +32,7 @@ TOKEN ProximoToken(void){
         }
         flagToken = 1;
         if(tokenActual == ID){
-            Buscar(buffer, tablaSimbolos, &tokenActual);
+            Buscar(buffer, indiceTS(buffer), &tokenActual);
         }
     }
     return tokenActual;
@@ -127,8 +127,8 @@ void Expresion(REG_EXPRESION * resultado){
 	{
         OperadorAditivo(&op);
         Primaria(&operandoDer);
-        memcpy(&operandoIzq, GenInfijo(operandoIzq, op, operandoDer),sizeof(REG_EXPRESION)); 
-        /* operandoIzq = GenInfijo(operandoIzq, op, operandoDer);*/
+        operandoIzq = GenInfijo(operandoIzq, op, operandoDer);
+        /*memcpy(&operandoIzq, GenInfijo(operandoIzq, op, operandoDer), sizeof(REG_EXPRESION)); */
     }
     *resultado = operandoIzq;
 }
@@ -142,11 +142,11 @@ void OperadorAditivo(REG_OPERACION * op){
     switch(token){
         case SUMA:
             Match(token);
-            op = ProcesarOp();
+            *op = ProcesarOp();
             break;
         case RESTA:
             Match(token);
-            op = ProcesarOp();
+            *op = ProcesarOp();
             break;
         default:
             ErrorSintactico(token);
@@ -166,7 +166,7 @@ void Primaria(REG_EXPRESION * presul){
             break;
         case CONSTANTE:
             Match(CONSTANTE);
-            presul = ProcesarCte();
+            *presul = ProcesarCte();
             break;
         case PARENIZQUIERDO:
             Match(PARENIZQUIERDO);

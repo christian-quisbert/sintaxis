@@ -35,6 +35,15 @@ typedef struct{
     char simbolo[TAMLEX];
 } REG_OPERACION;
 
+/* Nodo que representa un símbolo, en la Tabla de Símbolos */
+typedef struct{
+    char cadena[TAMLEX];    /* Lexema */
+    char * atributo;  /* Reservada o Identificador */
+} SIMBOLO;
+
+/* Tabla Símbolos */
+SIMBOLO * TS = NULL;
+
 /* Luego de leer un token se asigna a 0 */
 int flagToken;
 /* Variable que almacena el LEXEMA */
@@ -47,7 +56,9 @@ TOKEN tokenActual;
 /* Scanner */
 int columna(char);
 TOKEN scanner(void);
-int tablaSimbolos(char*);
+int indiceTS(char*);
+TOKEN esReservada(void);
+void initTS(void);
 
 /* Parser*/
 void Match(TOKEN);

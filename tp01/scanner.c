@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 #include "funciones.h"
 
 /**
@@ -77,18 +78,14 @@ TOKEN scanner(){
 	/*Retorno el token que corresponda al último estado*/
 	switch(estado){
 		case 1:
-			switch(tablaSimbolos(buffer)){
-			case 1:
-				return INICIO;
-			case 2:
-				return FIN;
-			case 3:
-				return LEER;
-			case 4:
-				return ESCRIBIR;
-			}
-			return ID;
+			return esReservada();
+		case 2:
+			ungetc(buffer[i],in);
+			return esReservada();
 		case 3:
+			return CONSTANTE;
+		case 4:
+			ungetc(buffer[i], in);
 			return CONSTANTE;
 		case 5:
 			return SUMA;
@@ -106,8 +103,6 @@ TOKEN scanner(){
 			return ASIGNACION;
 		case 13:
 			return FDT;
-		case 2:
-		case 4:
 		case 11:
 		case 14:
 			return ERRORLEXICO;
@@ -115,16 +110,48 @@ TOKEN scanner(){
     return -1; //nunca se va a leer esto
 }
 /**
-		\fn     tablaSimbolos
-		\brief  Indica si un lexema ingresado es palabra reservada.
-		\date   2017.08.29
+		\fn     indiceTS
+		\brief  Devuelve el indice de la palabra reservada lexema.
+		\date   2017.11.06
 		\param  char * lexema
-		\return int 
+		\return int
 */
-int tablaSimbolos(char* lexema){
-	static char* simbolos[4]={"INICIO","FIN","LEER","ESCRIBIR"};
-	int i;
-	for(i=0;i<4;i++)
-		if(!strcmp(lexema,simbolos[i])) break;
+int indiceTS(char * lexema){
+	int lenTS = strlen(TS);
+	for(int i=0; i<lenTS; i++)
+		if(!strcmp(lexema,TS[i].cadena)) break;
+	/*Devuelve el indice de la palabra reservada*/
 	return i+1;//le sumo 1 para que quede igual que el enum
+}
+
+/**
+		\fn     esReservada
+		\brief  Devuelve el TOKEN correspondiente a una palabra reservada o identificador.
+		\date   2017.11.06 
+*/
+TOKEN esReservada(void){
+	switch(indiceTS(buffer)){
+		case 1:
+			return INICIO;
+		case 2:
+			return FIN;
+		case 3:
+			return LEER;
+		case 4:
+			return ESCRIBIR;
+		default:
+			return ID;
+		}
+};
+/**
+		\fn     initTS
+		\brief  Inicializo la TS, con las palabras reservada del lenguaje MICRO (4 palabras).
+		\date   2017.11.06 
+*/
+void initTS(void){
+	TS = (*SIMBOLO) malloc(sizeof(SIMBOLO) * 4);
+	strcpy(TS[0].cadena, "INICIO");		strcpy(TS[0].atributo, "reservada";
+	strcpy(TS[1].cadena, "FIN");		strcpy(TS[1].atributo, "reservada";
+	strcpy(TS[2].cadena, "LEER");		strcpy(TS[2].atributo, "reservada";
+	strcpy(TS[3].cadena, "ESCRIBIR");	strcpy(TS[3].atributo, "reservada");
 }
