@@ -63,18 +63,21 @@ TOKEN scanner(){
 	int i = 0;
 	char c;
 	
-	/*Leo por caracter y me fijo su estado*/
+	/*Leo caracter por caracter hasta llegar al fin de linea.*/
 	do{
-		c = lexema[i];
+		c = fgetc(in);
 		estado = TT[estado][columna(c)];
-		i++;
-
-	}while(lexema[i] != '\0' && estado != 14);
+		if(columna(c) != 11){
+			buffer[i] = c;
+			i++;
+		}
+	}while(feof(in) && estado != 14);
 	
+
 	/*Retorno el token que corresponda al último estado*/
 	switch(estado){
 		case 1:
-			switch(tablaSimbolos(lexema)){
+			switch(tablaSimbolos(buffer)){
 			case 1:
 				return INICIO;
 			case 2:

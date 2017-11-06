@@ -46,7 +46,7 @@ TOKEN tokenActual;
 /* Prototipos de función */
 /* Scanner */
 int columna(char);
-TOKEN scanner();
+TOKEN scanner(void);
 int tablaSimbolos(char*);
 
 /* Parser*/
