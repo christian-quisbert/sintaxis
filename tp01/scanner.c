@@ -40,7 +40,7 @@ int columna(char c){
 		\date   2017.08.23
 		\return TOKEN
 */
-TOKEN scanner(){
+TOKEN scanner(void){
 	/*Tabla de transición de lenguaje MICRO*/
     static int TT[ESTADOS][COLUMNAS] = {
 		{1	,3	,5	,6	,7	,8	,9	,10	,11	,14	,13	,0	,14	},
@@ -117,8 +117,8 @@ TOKEN scanner(){
 		\return int
 */
 int indiceTS(char * lexema){
-	int lenTS = strlen(TS);
-	for(int i=0; i<lenTS; i++)
+	int i;
+	for(i=0; i < indiceActualTS; i++)
 		if(!strcmp(lexema,TS[i].cadena)) break;
 	/*Devuelve el indice de la palabra reservada*/
 	return i+1;//le sumo 1 para que quede igual que el enum
@@ -149,9 +149,11 @@ TOKEN esReservada(void){
 		\date   2017.11.06 
 */
 void initTS(void){
-	TS = (*SIMBOLO) malloc(sizeof(SIMBOLO) * 4);
-	strcpy(TS[0].cadena, "INICIO");		strcpy(TS[0].atributo, "reservada";
-	strcpy(TS[1].cadena, "FIN");		strcpy(TS[1].atributo, "reservada";
-	strcpy(TS[2].cadena, "LEER");		strcpy(TS[2].atributo, "reservada";
+	TS = (SIMBOLO*) malloc(sizeof(SIMBOLO) * 4);
+	strcpy(TS[0].cadena, "INICIO");		strcpy(TS[0].atributo, "reservada");
+	strcpy(TS[1].cadena, "FIN");		strcpy(TS[1].atributo, "reservada");
+	strcpy(TS[2].cadena, "LEER");		strcpy(TS[2].atributo, "reservada");
 	strcpy(TS[3].cadena, "ESCRIBIR");	strcpy(TS[3].atributo, "reservada");
+	/* A partir de este indiceActualTS = 3, se empiezan a almacenar los IDENTIFICADORES */
+	indiceActualTS = 3;
 }

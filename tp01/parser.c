@@ -7,6 +7,7 @@
 */
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "funciones.h"
 
 /**
@@ -16,7 +17,7 @@
         \param  TOKEN t
 */
 void Match(TOKEN t){
-    if(!(t == ProximoToken())) ErrorSintactico();
+    if(!(t == ProximoToken())) ErrorSintactico(t);
     flagToken = 0;
 }
 /**
@@ -32,7 +33,7 @@ TOKEN ProximoToken(void){
         }
         flagToken = 1;
         if(tokenActual == ID){
-            Buscar(buffer, indiceTS(buffer), &tokenActual);
+            Buscar(buffer);
         }
     }
     return tokenActual;
@@ -247,12 +248,17 @@ char * Extraer(REG_EXPRESION reg){
 }
 /*
 		\fn     Buscar
-        \brief  Bsuca un ID en la tabla de símbolos, y determina si se encuentra o nó.
+        \brief  Bsuca un ID en la tabla de símbolos, y (1 = Si) (0 = No).
         \date   2017.11.05
         \param  char * s
 */
-void Buscar(char * s){
-    
+int Buscar(char * s){
+    int i = 0;
+    while(i <= indiceActualTS){
+        if(TS[i].cadena == s) return 1;
+        i++;
+    }    
+    return 0;
 }
 /*
 		\fn     Colocar
@@ -261,7 +267,12 @@ void Buscar(char * s){
         \param  char * s
 */
 void Colocar(char * s){
+    TS = (SIMBOLO*) realloc(TS, sizeof(SIMBOLO));
+    /* Actualizo el índice Actual de la TS */
+    indiceActualTS++;
 
+    strcpy(TS[indiceActualTS].cadena, s);
+    strcpy(TS[indiceActualTS].atributo, "identificador");
 }
 /*
 		\fn     Chequear
@@ -274,4 +285,20 @@ void Chequear(char * s){
         Colocar(s);
         Generar("Declara", s, "Entera", "");
     }
+}
+/*
+		\fn     ErrorLexico
+		\brief  Indica por consola que hubo error léxico.
+        \date   2017.11.09
+*/
+void ErrorLexico(void){
+    printf("***Error Léxico\n");
+}
+/*
+		\fn     ErrorLexico
+		\brief  Indica por consola que hubo error sintáctico.
+        \date   2017.11.09
+*/
+void ErrorSintactico(TOKEN token){
+    printf("***Error Sintáctico\n");
 }

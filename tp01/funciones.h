@@ -50,6 +50,8 @@ int flagToken;
 char buffer[TAMLEX];
 /* Token actual */
 TOKEN tokenActual;
+/* para usar en la funcion colocar() y saber en que posición está el puntero al vector TS. */
+int indiceActualTS;
 
 
 /* Prototipos de función */
@@ -63,7 +65,7 @@ void initTS(void);
 /* Parser*/
 void Match(TOKEN);
 TOKEN ProximoToken(void);
-void objetivo (void);
+void Objetivo (void);
 void Programa (void);
 void ListaSentencias(void);
 void Sentencia(void);
@@ -77,13 +79,15 @@ void Identificador(REG_EXPRESION*);
 /* Funciones auxiliares del Parser */
 void Generar(char*, char*, char*, char*);
 char* Extraer(REG_EXPRESION);
-void Buscar(char*);
+int Buscar(char*);
 void Colocar(char*);
 void Chequear(char*);
+void ErrorLexico(void);
+void ErrorSintactico(TOKEN);
 
 /* Rutinas semánticas y funciones auxiliares */
 void Comenzar(void);
-void terminar(void);
+void Terminar(void);
 void Asignar(REG_EXPRESION, REG_EXPRESION);
 void Leer(REG_EXPRESION);
 void Escribir(REG_EXPRESION);
