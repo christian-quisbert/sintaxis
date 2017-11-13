@@ -5,39 +5,13 @@
 		\date    2017.11.05
 		\version Versión 1.0.0
 */
-#include "funciones.h"
+#include <ctype.h>
+#include <stdio.h>
+#include <string.h>
 
-/****************************************
-********** FUNCIONES AUXILIARES *********
-*****************************************/
-
-/**
-		\fn     Comenzar
-		\brief  Inicializaciones semánticas
-        \date   2017.11.05
-*/
-void Comenzar(void){
-    flagToken = 0;
-    indiceActualTS = 0;
-    initTS();
-}
-/**
-		\fn     Terminar
-		\brief  Genera la instrucción para terminar la ejecución del programa.
-        \date   2017.11.05
-*/
-void Terminar(void){
-    free(TS);
-    Generar("Detiene", "", "", "");
-}
-/**
-		\fn     Asignar
-		\brief  Genera la instrucción para la asignación.
-        \date   2017.11.05
-*/
-void Asignar(REG_EXPRESION izquierda, REG_EXPRESION derecha){
-    Generar("Almacena", Extraer(derecha), izquierda.nombre, "");
-}
+#include "micro.h"
+#include "rutinas.h"
+#include "auxiliares.h"
 
 /****************************************
 *********** RUTINAS SEMÁNTICAS **********
@@ -47,16 +21,16 @@ void Asignar(REG_EXPRESION izquierda, REG_EXPRESION derecha){
 		\brief  Genera la instrucción para Leer.
         \date   2017.11.05
 */
-void Leer(REG_EXPRESION in){
-    Generar("Read", in.nombre, "Entera", "");
+void Leer(REG_EXPRESION reg_in){
+    Generar("Read", reg_in.nombre, "Entera", "");
 }
 /**
 		\fn     Escribir
 		\brief  Genera la instrucción para Escribir.
         \date   2017.11.05
 */
-void Escribir(REG_EXPRESION out){
-    Generar("Write", Extraer(out), "Entera", "");
+void Escribir(REG_EXPRESION reg_out){
+    Generar("Write", Extraer(&reg_out), "Entera", "");
 }
 /*
 		\fn     ProcesarId
@@ -89,9 +63,9 @@ REG_EXPRESION ProcesarCte(void){
         \date   2017.11.04
         \return REG_EXPRESION         
 */
-REG_OPERACION ProcesarOp(void){
-    REG_OPERACION op;
-    sscanf(buffer, "%s", &op.simbolo);
+REG_OPERACION * ProcesarOp(void){
+    REG_OPERACION * op;
+    sscanf(buffer, "%s", op->simbolo);
     return op;
 }
 /*
@@ -99,24 +73,24 @@ REG_OPERACION ProcesarOp(void){
 		\brief  Genera la instrucción para una operación INFIJA y construye un registro semántico con el resultado.
 		\date   2017.11.04
 */
-REG_EXPRESION GenInfijo(REG_EXPRESION e1, REG_OPERACION operador, REG_EXPRESION e2){
+REG_EXPRESION GenInfijo(REG_EXPRESION e1, REG_OPERACION * operador, REG_EXPRESION e2){
     REG_EXPRESION reg;
     static unsigned int numTemp = 1;    /*Se ejecuta solo la 1era vez que ingresa a la función*/
     char cadTemp[TAMLEX] = "Temp&";
     char cadNum[TAMLEX];
     char cadOp[TAMLEX];
 
-    if(operador.simbolo == "-") strcpy(cadOp,"Resta");
-    if(operador.simbolo == "+") strcpy(cadOp,"Suma");
+    if(operador->simbolo == "-") strcpy(cadOp,"Resta");
+    if(operador->simbolo == "+") strcpy(cadOp,"Suma");
 
     sprintf(cadNum,"%d",numTemp);   /*Convierte a numTemp(INT) en cadena, y lo guarda en cadNum*/
     numTemp ++;
     strcat(cadTemp,cadNum);
 
-    if(e1.clase == ID) Chequear(Extraer(e1));
-    if(e2.clase == ID) Chequear(Extraer(e2));
+    if(e1.clase == ID) Chequear(Extraer(&e1));
+    if(e2.clase == ID) Chequear(Extraer(&e2));
     Chequear(cadTemp);  /* ??? */
-    Generar(cadOp, Extraer(e1), Extraer(e2), cadTemp);
+    Generar(cadOp, Extraer(&e1), Extraer(&e2), cadTemp);
     strcpy(reg.nombre, cadTemp);
     return reg;
 }

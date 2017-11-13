@@ -3,6 +3,11 @@
 
 #define TAMLEX  32
 
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+
 FILE * in;
 FILE * out;
 

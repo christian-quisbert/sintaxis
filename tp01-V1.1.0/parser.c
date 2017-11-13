@@ -5,36 +5,15 @@
 		\date    2017.11.04
 		\version Versión 1.0.0
 */
-#include "funciones.h"
+#include <ctype.h>
+#include <stdio.h>
+#include <string.h>
 
-/**
-		\fn     Match
-		\brief  Analiza el token t
-        \date   2017.11.04
-        \param  TOKEN t
-*/
-void Match(TOKEN t){
-    if(!(t == ProximoToken())) ErrorSintactico(t);
-    flagToken = 0;
-}
-/**
-		\fn     ProximoToken
-		\brief  Llamo al scanner para analizar el token
-		\date   2017.11.04
-*/
-TOKEN ProximoToken(void){
-    if(!flagToken){
-        tokenActual = scanner();
-        if(tokenActual == ERRORLEXICO){
-            ErrorLexico();
-        }
-        flagToken = 1;
-        if(tokenActual == ID){
-            Buscar(buffer);
-        }
-    }
-    return tokenActual;
-}
+#include "micro.h"
+#include "parser.h"
+#include "rutinas.h"
+#include "auxiliares.h"
+
 /**
 		\fn     Objetivo
 		\brief  Objetivo del compilador para el lenguaje "micro"
@@ -117,13 +96,13 @@ void Sentencia(void){
 */
 void Expresion(REG_EXPRESION * resultado){
     REG_EXPRESION operandoIzq, operandoDer;
-    REG_OPERACION op;
+    REG_OPERACION * op;
     TOKEN t;
     
 	Primaria(&operandoIzq);
 	for (t = ProximoToken(); t == SUMA || t == RESTA ; t = ProximoToken())
 	{
-        OperadorAditivo(&op);
+        OperadorAditivo(op);
         Primaria(&operandoDer);
         operandoIzq = GenInfijo(operandoIzq, op, operandoDer);
         /*memcpy(&operandoIzq, GenInfijo(operandoIzq, op, operandoDer), sizeof(REG_EXPRESION)); */
@@ -137,38 +116,30 @@ void Expresion(REG_EXPRESION * resultado){
 */
 void OperadorAditivo(REG_OPERACION * op){
     TOKEN token = ProximoToken();
-    switch(token){
-        case SUMA:
-            Match(token);
-            *op = ProcesarOp();
-            break;
-        case RESTA:
-            Match(token);
-            *op = ProcesarOp();
-            break;
-        default:
-            ErrorSintactico(token);
-    }
+    if(token == SUMA || token == RESTA){
+        Match(token);
+        op = ProcesarOp();
+    }else
+        ErrorSintactico(token);
+    
 }
 /*
 		\fn     Primaria
 		\brief  Analiza el contenido de una expresión.
 		\date   2017.11.04
 */
-void Primaria(REG_EXPRESION * presul){
-    TOKEN token = ProximoToken();
-
-    switch(token){
+void Primaria(REG_EXPRESION * resultado){
+    switch(ProximoToken()){
         case ID:
-            Identificador(presul);
+            Identificador(resultado);
             break;
         case CONSTANTE:
             Match(CONSTANTE);
-            *presul = ProcesarCte();
+            *resultado = ProcesarCte();
             break;
         case PARENIZQUIERDO:
             Match(PARENIZQUIERDO);
-            Expresion(presul);
+            Expresion(resultado);
             Match(PARENDERECHO);
             break;
         default:
@@ -214,88 +185,9 @@ void ListaExpresiones(void){
 		\fn     Primaria
 		\brief  Procesa un ID, genera el REG semantico apropiado.
         \date   2017.11.04
-        \param  REG_EXPRESION * presul
+        \param  REG_EXPRESION * resultado
 */
-void Identificador(REG_EXPRESION * presul){
+void Identificador(REG_EXPRESION * resultado){
     Match(ID);
-    *presul = ProcesarId();
-}
-
-/****************************************
-********** FUNCIONES AUXILIARES *********
-*****************************************/
-
-/*
-		\fn     Generar
-		\brief  Genero la instrucción que va en la MV.
-        \date   2017.11.04
-        \param  char * a,b,c,d
-*/
-void Generar(char * accion, char * v1, char * v2, char * d){
-    fprintf(out,"\nInstrucción: %s %s, %s %s\n", accion, v1, v2, d);
-}
-/*
-		\fn     Extraer
-		\brief  Retorna la cadena de un registro semántico.
-        \date   2017.11.04
-        \param  REG_EXPRESION reg
-*/
-char * Extraer(REG_EXPRESION reg){
-    return reg.nombre;
-}
-/*
-		\fn     Buscar
-        \brief  Bsuca un ID en la tabla de símbolos, y (1 = Si) (0 = No).
-        \date   2017.11.05
-        \param  char * s
-*/
-int Buscar(char * s){
-    int i = 0;
-    while(i <= indiceActualTS){
-        if(TS[i].cadena == s) return 1;
-        i++;
-    }    
-    return 0;
-}
-/*
-		\fn     Colocar
-        \brief  Inserta un ID en la tabla de símbolos.
-        \date   2017.11.05
-        \param  char * s
-*/
-void Colocar(char * s){
-    TS = (SIMBOLO*) realloc(TS, sizeof(SIMBOLO));
-    /* Actualizo el índice Actual de la TS */
-    indiceActualTS++;
-
-    strcpy(TS[indiceActualTS].cadena, s);
-    strcpy(TS[indiceActualTS].atributo, "identificador");
-}
-/*
-		\fn     Chequear
-		\brief  Verifica que la cadena esté en la tabla de símbolos.
-        \date   2017.11.05
-        \param  char * s
-*/
-void Chequear(char * s){
-    if(!Buscar(s)){
-        Colocar(s);
-        Generar("Declara", s, "Entera", "");
-    }
-}
-/*
-		\fn     ErrorLexico
-		\brief  Indica por consola que hubo error léxico.
-        \date   2017.11.09
-*/
-void ErrorLexico(void){
-    printf("***Error Léxico\n");
-}
-/*
-		\fn     ErrorLexico
-		\brief  Indica por consola que hubo error sintáctico.
-        \date   2017.11.09
-*/
-void ErrorSintactico(TOKEN token){
-    printf("***Error Sintáctico\n");
+    *resultado = ProcesarId();
 }
