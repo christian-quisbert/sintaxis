@@ -83,13 +83,13 @@ TOKEN scanner(void){
 			return esReservada();
 		case 2:
 			ungetc(buffer[i],in);
-			buffer[i-1] = '\0';
+			buffer[i] = '\0';
 			return esReservada();
 		case 3:
 			return CONSTANTE;
 		case 4:
 			ungetc(buffer[i], in);
-			buffer[i-1] = '\0';
+			buffer[i] = '\0';
 			return CONSTANTE;
 		case 5:
 			return SUMA;
@@ -153,10 +153,10 @@ TOKEN esReservada(void){
 		\date   2017.11.06 
 */
 void initTS(void){
-	/*strcpy(TS[0].cadena, "INICIO");		strcpy(TS[0].atributo, "reservada");*/
-	/*strcpy(TS[1].cadena, "FIN");		strcpy(TS[1].atributo, "reservada");*/
-	/*strcpy(TS[2].cadena, "LEER");		strcpy(TS[2].atributo, "reservada");*/
-	/*strcpy(TS[3].cadena, "ESCRIBIR");	strcpy(TS[3].atributo, "reservada");*/
+	strcpy(TS[0].cadena, "INICIO");		TS[0].atributo = INICIO;
+	strcpy(TS[1].cadena, "FIN");		TS[1].atributo = FIN;
+	strcpy(TS[2].cadena, "LEER");		TS[2].atributo = LEER;
+	strcpy(TS[3].cadena, "ESCRIBIR");	TS[3].atributo = ESCRIBIR;
 	/* A partir de este indiceActualTS = 3, se empiezan a almacenar los IDENTIFICADORES */
 	indiceActualTS = 3;
 }

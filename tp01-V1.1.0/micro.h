@@ -45,7 +45,7 @@ typedef struct{
 /* -----DECLARACIÓN DE LAS VARIABLES GLOBALES----- */
 
 /* Tabla Símbolos */
-SIMBOLO TS[1000] ={ {"INICIO", INICIO}, {"FIN", FIN}, {"LEER", LEER}, {"ESCRIBIR", ESCRIBIR},{"variable",ID} };
+SIMBOLO TS[1000];
 
 /* Luego de leer un token se asigna a 0 */
 int flagToken;

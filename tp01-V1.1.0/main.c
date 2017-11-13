@@ -7,7 +7,6 @@
 */
 #include <ctype.h>
 #include <stdio.h>
-#include <string.h>
 
 #include "micro.h"
 #include "parser.h"
@@ -34,8 +33,10 @@ int main (int argc, char *argv[]){
 		printf("\n(File error) No se pudo abrir el archivo de Salida.\n");
 		return -4;
 	}
-	 printf("asdasd");
+
+	printf("Inicio objetivo");
 	Objetivo();
+	printf("Fin objetivo");
 
 	fclose(in);
 	fclose(out);
