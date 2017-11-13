@@ -80,8 +80,8 @@ REG_EXPRESION GenInfijo(REG_EXPRESION e1, REG_OPERACION * operador, REG_EXPRESIO
     char cadNum[TAMLEX];
     char cadOp[TAMLEX];
 
-    if(operador->simbolo == "-") strcpy(cadOp,"Resta");
-    if(operador->simbolo == "+") strcpy(cadOp,"Suma");
+    if(operador->simbolo[0] == '-') strcpy(cadOp,"Resta");
+    if(operador->simbolo[0] == '+') strcpy(cadOp,"Suma");
 
     sprintf(cadNum,"%d",numTemp);   /*Convierte a numTemp(INT) en cadena, y lo guarda en cadNum*/
     numTemp ++;

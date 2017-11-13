@@ -80,7 +80,7 @@ void Colocar(char * s){
     indiceActualTS++;
 
     strcpy(TS[indiceActualTS].cadena, s);
-    strcpy(TS[indiceActualTS].atributo, "identificador");
+    TS[indiceActualTS].atributo = ID;
 }
 /*
 		\fn     Chequear
