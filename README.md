@@ -6,7 +6,7 @@ Prof.: Ricardo G. Barca
 
 ## Support
 
-- [Christian L. Quisbert](christianquisbert@gmail.com)
+- Christian L. Quisbert (christianquisbert@gmail.com)
 - [Bug Reports](https://github.com/christian-quisbert/sintaxis/issues)
 
 ## Contributors
