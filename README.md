@@ -19,7 +19,7 @@ View all [contributors](https://github.com/christian-quisbert/sintaxis/graphs/co
 
 ## Installation
 
-Use the [Makefile](https://github.com/christian-quisbert/sintaxis/tree/master/Compilador-Micro-V1.1.0) file to compile and link the source files with gcc:
+Use the [Makefile](https://github.com/christian-quisbert/sintaxis/blob/master/Compilador-Micro-V1.1.0/Makefile) file to compile and link the source files with gcc:
 
 ```sh
 $ make
