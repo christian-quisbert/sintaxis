@@ -1,9 +1,9 @@
 /**
 		\file    funciones.c
-		\brief   Contiene las funciones para main.c
+		\brief   Contiene las funciones para el scanner.
 		\author  Chistian Leonel Quisbert (christianquisbert@gmail.com)
-		\date    2017.08.21
-		\version Versión 1.0.0
+		\date    2017.11.14
+		\version Versión 1.1.0
 */
 #include <ctype.h>
 #include <stdio.h>
@@ -70,13 +70,12 @@ TOKEN scanner(void){
 	do{
 		c = fgetc(in);
 		estado = TT[estado][columna(c)];
-		if(columna(c) != 11){
+		/*if(columna(c) != 11){*/
+		if(estado!=0){
 			buffer[i] = c;
 			i++;
 		}
 	}while(!esEstadoFinal(estado) && estado!=14);
-
-	/*buffer[i] = '\0';*/
 
 	/*Retorno el token que corresponda al último estado*/
 	switch(estado){
@@ -123,7 +122,7 @@ TOKEN scanner(void){
 */
 int indiceTS(char * lexema){
 	int i;
-	for(i=0; i < indiceActualTS; i++)
+	for(i=0; i <= indiceActualTS; i++)
 		if(!strcmp(lexema,TS[i].cadena)) break;
 	/*Devuelve el indice de la palabra reservada*/
 	return i+1; /* le sumo 1 para que quede igual que el enum */
@@ -132,7 +131,7 @@ int indiceTS(char * lexema){
 /**
 		\fn     esReservada
 		\brief  Devuelve el TOKEN correspondiente a una palabra reservada o identificador.
-		\date   2017.11.06 
+		\date   2017.11.06
 */
 TOKEN esReservada(void){
 	switch(indiceTS(buffer)){

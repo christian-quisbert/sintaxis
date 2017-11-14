@@ -1,10 +1,11 @@
 /**
 		\file    parser.c
-		\brief   Contiene las funciones que implementa el parser
+		\brief   Contiene las funciones que implementa el parser.
 		\author  Chistian Leonel Quisbert (christianquisbert@gmail.com)
-		\date    2017.11.04
-		\version Versión 1.0.0
+		\date    2017.11.14
+		\version Versión 1.1.0
 */
+
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>

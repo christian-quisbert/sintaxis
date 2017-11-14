@@ -3,8 +3,9 @@
 		\brief   Contiene el menu principal. Donde se recibe el archivo fuente en lenguaje "micro".
 		\author  Chistian Leonel Quisbert (christianquisbert@gmail.com)
 		\date    2017.11.04
-		\version Versión 1.0.1
+		\version Versión 1.1.0
 */
+
 #include <ctype.h>
 #include <stdio.h>
 
@@ -33,7 +34,7 @@ int main (int argc, char *argv[]){
 		printf("\n(File error) No se pudo abrir el archivo de Salida.\n");
 		return -4;
 	}
-
+	
 	Objetivo();
 
 	fclose(in);

@@ -1,8 +1,28 @@
 
+Instrucción: Declara X, Entera 
+
+Instrucción: Almacena 7, X 
+
+Instrucción: Declara Y, Entera 
+
+Instrucción: Almacena 6, Y 
+
+Instrucción: Declara z, Entera 
+
 Instrucción: Declara Temp&1, Entera 
 
-Instrucción: Suma , 4 Temp&1
+Instrucción: Suma X, Y Temp&1
 
-Instrucción: Write Temp&1, Entera 
+Instrucción: Almacena Temp&1, z 
+
+Instrucción: Write X, Entera 
+
+Instrucción: Declara Z, Entera 
+
+Instrucción: Write Z, Entera 
+
+Instrucción: Declara A, Entera 
+
+Instrucción: Read A, Entera 
 
 Instrucción: Detiene ,  

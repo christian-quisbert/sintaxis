@@ -1,3 +1,11 @@
+/**
+		\file    auxiliares.c
+		\brief   Contiene las funciones auxiliares de rutinas semanticas y del Parser.
+		\author  Chistian Leonel Quisbert (christianquisbert@gmail.com)
+		\date    2017.11.14
+		\version Versión 1.1.0
+*/
+
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
@@ -9,6 +17,7 @@
 /****************************************
 ********** FUNCIONES AUXILIARES *********
 *****************************************/
+
 /**
 		\fn     Match
 		\brief  Analiza el token t
@@ -63,8 +72,8 @@ char * Extraer(REG_EXPRESION * reg){
 */
 int Buscar(char * s){
     int i = 0;
-    while(i <= indiceActualTS){
-        if(TS[i].cadena == s) return 1;
+    while(i < indiceActualTS){
+        if(!strcmp(TS[i].cadena, s)) return 1;
         i++;
     }    
     return 0;
