@@ -34,9 +34,7 @@ int main (int argc, char *argv[]){
 		return -4;
 	}
 
-	printf("Inicio objetivo");
 	Objetivo();
-	printf("Fin objetivo");
 
 	fclose(in);
 	fclose(out);

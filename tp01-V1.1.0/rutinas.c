@@ -56,6 +56,7 @@ REG_EXPRESION ProcesarCte(void){
     REG_EXPRESION t;
     t.clase = CONSTANTE;
     sscanf(buffer, "%d", &t.valor);
+    strcpy(t.nombre, buffer);
     return t;
 }
 /*
@@ -64,9 +65,9 @@ REG_EXPRESION ProcesarCte(void){
         \date   2017.11.04
         \return REG_EXPRESION         
 */
-REG_OPERACION * ProcesarOp(void){
-    REG_OPERACION * op;
-    sscanf(buffer, "%s", op->simbolo);
+REG_OPERACION ProcesarOp(void){
+    REG_OPERACION op;
+    strcpy(op.simbolo, buffer);
     return op;
 }
 /*
@@ -80,7 +81,6 @@ REG_EXPRESION GenInfijo(REG_EXPRESION e1, REG_OPERACION * operador, REG_EXPRESIO
     char cadTemp[TAMLEX] = "Temp&";
     char cadNum[TAMLEX];
     char cadOp[TAMLEX];
-
     if(operador->simbolo[0] == '-') strcpy(cadOp,"Resta");
     if(operador->simbolo[0] == '+') strcpy(cadOp,"Suma");
 

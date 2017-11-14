@@ -78,12 +78,14 @@ void Sentencia(void){
             ListaIdentificadores();
             Match(PARENDERECHO);
             Match(PUNTOYCOMA);
+            break;
         case ESCRIBIR:
             Match(ESCRIBIR);
             Match(PARENIZQUIERDO);
             ListaExpresiones(); 
             Match(PARENDERECHO);
             Match(PUNTOYCOMA);
+            break;
         default:
             ErrorSintactico(token);
             break;
@@ -96,15 +98,15 @@ void Sentencia(void){
 */
 void Expresion(REG_EXPRESION * resultado){
     REG_EXPRESION operandoIzq, operandoDer;
-    REG_OPERACION * op;
+    REG_OPERACION op;
     TOKEN t;
     
 	Primaria(&operandoIzq);
 	for (t = ProximoToken(); t == SUMA || t == RESTA ; t = ProximoToken())
 	{
-        OperadorAditivo(op);
+        OperadorAditivo(&op);
         Primaria(&operandoDer);
-        operandoIzq = GenInfijo(operandoIzq, op, operandoDer);
+        operandoIzq = GenInfijo(operandoIzq, &op, operandoDer);
         /*memcpy(&operandoIzq, GenInfijo(operandoIzq, op, operandoDer), sizeof(REG_EXPRESION)); */
     }
     *resultado = operandoIzq;
@@ -118,7 +120,7 @@ void OperadorAditivo(REG_OPERACION * op){
     TOKEN token = ProximoToken();
     if(token == SUMA || token == RESTA){
         Match(token);
-        op = ProcesarOp();
+        *op = ProcesarOp();
     }else
         ErrorSintactico(token);
     

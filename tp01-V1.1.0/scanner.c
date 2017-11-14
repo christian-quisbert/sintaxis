@@ -30,7 +30,7 @@ int columna(char c){
     if(c ==';')     return 7;
     if(c ==':')     return 8;
     if(c =='=')     return 9;
-    if(c =='\n')    return 10;
+    if(c == EOF)    return 10;
     if(isspace(c))  return 11;
     return 12;
 }
@@ -61,6 +61,7 @@ TOKEN scanner(void){
 		{14	,14	,14	,14	,14	,14	,14	,14	,14	,14	,14	,14	,14	}
 		
 	};
+	/*LimpiarBuffer();*/
 	int estado = 0;
 	int i = 0;
 	char c;
@@ -73,7 +74,7 @@ TOKEN scanner(void){
 			buffer[i] = c;
 			i++;
 		}
-	}while(!esEstadoFinal(estado));
+	}while(!esEstadoFinal(estado) && estado!=14);
 
 	/*buffer[i] = '\0';*/
 
@@ -82,14 +83,14 @@ TOKEN scanner(void){
 		case 1:
 			return esReservada();
 		case 2:
-			ungetc(buffer[i],in);
-			buffer[i] = '\0';
+			ungetc(c,in);
+			buffer[i-1] = '\0';
 			return esReservada();
 		case 3:
 			return CONSTANTE;
 		case 4:
-			ungetc(buffer[i], in);
-			buffer[i] = '\0';
+			ungetc(c, in);
+			buffer[i-1] = '\0';
 			return CONSTANTE;
 		case 5:
 			return SUMA;
@@ -165,9 +166,15 @@ int esEstadoFinal(int estado){
 		case 0:
 		case 1:
 		case 3:
-		case 11: 
+		case 11:
 		case 14:
 			return 0;
 	}
 	return 1;
+}
+void LimpiarBuffer(void){
+	int i;
+	for (i=0; i <= TAMLEX; i++){
+		buffer[i]='\0';
+	}
 }
