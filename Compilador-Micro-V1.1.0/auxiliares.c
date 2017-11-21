@@ -25,7 +25,7 @@
         \param  TOKEN t
 */
 void Match(TOKEN t){
-    if(!(t == ProximoToken())) ErrorSintactico(t);
+    if(!(t == ProximoToken()) && ProximoToken() !=ERRORLEXICO) ErrorSintactico(t);
     flagToken = 0;
 }
 /**
@@ -53,7 +53,7 @@ TOKEN ProximoToken(void){
         \param  char * a,b,c,d
 */
 void Generar(char * accion, char * v1, char * v2, char * d){
-    fprintf(out,"\nInstrucción: %s %s, %s %s\n", accion, v1, v2, d);
+    fprintf(out,"%s %s, %s %s\n", accion, v1, v2, d);
 }
 /*
 		\fn     Extraer

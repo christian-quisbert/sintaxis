@@ -1,0 +1,14 @@
+Declara X, Entera 
+Almacena 7, X 
+Declara Y, Entera 
+Almacena 6, Y 
+Declara z, Entera 
+Declara Temp&1, Entera 
+Suma X, Y Temp&1
+Almacena Temp&1, z 
+Write X, Entera 
+Declara Z, Entera 
+Write Z, Entera 
+Declara A, Entera 
+Read A, Entera 
+Detiene ,  
